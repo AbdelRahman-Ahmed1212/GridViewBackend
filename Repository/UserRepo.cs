@@ -1,4 +1,5 @@
-﻿using Task2.DBContext;
+﻿using System.Linq.Dynamic.Core;
+using Task2.DBContext;
 using Task2.DTOs;
 using Task2.IRepository;
 using Task2.Models;
@@ -12,15 +13,24 @@ namespace Task2.Repository
         {
             this.context = context;
         }
-        public IEnumerable<DaUser> GetUsers(int page, int pageSize)
+        public IEnumerable<DaUser> GetUsers(RequestDto requestDto)
         {
             IQueryable<DaUser> usersPaginated =
-                        context.DaUsers.Skip(page * pageSize)
-                                        .Take(pageSize)
-                                        
+                        context.DaUsers
+                               .GenericSort(requestDto)
+                               .Skip(requestDto.PageSize * requestDto.CurrentPage)
+                               .Take(requestDto.PageSize);
+                                
+
+
 
 
             return usersPaginated;
         }
+        public int Count()
+        {
+            return context.DaUsers.Count();
+        }
+     
     }
 }

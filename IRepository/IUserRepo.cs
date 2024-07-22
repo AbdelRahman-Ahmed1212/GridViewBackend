@@ -5,7 +5,8 @@ namespace Task2.IRepository
 {
     public interface IUserRepo
     {
-        IEnumerable<DaUser> GetUsers(int page,int pageSize);
+        IEnumerable<DaUser> GetUsers(RequestDto requestDto);
+        public int Count();
 
 
     }

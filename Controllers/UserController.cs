@@ -15,12 +15,18 @@ namespace Task2.Controllers
             this.userRepo = userRepo;
         }
 
-        [HttpGet]
-        public IList<DaUser> Get(RequestDto requestDto)
+        [HttpPost]
+        public  ResponseDto<DaUser> Get(RequestDto requestDto)
         {
-            return userRepo.GetUsers(requestDto.CurrentPage, requestDto.PageSize).ToList();
+
+            return new ResponseDto<DaUser>
+            {
+                Data = userRepo.GetUsers(requestDto).ToList(),
+                page = requestDto.CurrentPage,
+                TotalNumberOfPages = (userRepo.Count() / requestDto.PageSize) + 1
+
+            };
         }
-        
 
         
     }
