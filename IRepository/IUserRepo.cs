@@ -1,4 +1,5 @@
 ﻿using Task2.DTOs;
+using Task2.Interfaces;
 using Task2.Models;
 
 namespace Task2.IRepository
@@ -7,6 +8,12 @@ namespace Task2.IRepository
     {
         IEnumerable<DaUser> GetUsers(RequestDto requestDto);
         public int Count();
+
+        #region  Helpers
+
+         string GenerateFilterQuery(List<Filter> filters);
+       
+        #endregion
 
 
     }
