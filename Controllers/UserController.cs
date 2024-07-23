@@ -2,6 +2,8 @@
 using Task2.DTOs;
 using Task2.IRepository;
 using Task2.Models;
+using Task2.Services;
+using Task2.ViewModels;
 
 namespace Task2.Controllers
 {
@@ -9,22 +11,23 @@ namespace Task2.Controllers
     [Route("[controller]")]
     public class UserController: ControllerBase
     {
+        private readonly UserService userService;
         private readonly IUserRepo userRepo;
-        public UserController(IUserRepo userRepo)
+        public UserController(UserService userService, IUserRepo userRepo)
         {
+            this.userService = userService;
             this.userRepo = userRepo;
         }
 
         [HttpPost]
-        public  ResponseDto<DaUser> Get(RequestDto requestDto)
+        public  ResponseDto<UserViewModel> Get(RequestDto requestDto)
         {
-            var users = userRepo.GetUsers(requestDto).ToList();
-
-            return new ResponseDto<DaUser>
+            var query = requestDto.filters.GenerateFilterQuery();
+            return new ResponseDto<UserViewModel>()
             {
-                Data = users,
+                Data = userService.GetUsersViewModel(requestDto).ToList(),
                 page = requestDto.CurrentPage,
-                TotalNumberOfPages = (users.Count() / requestDto.PageSize) + 1
+                TotalNumberOfPages = (this.userRepo.Count(query) / requestDto.PageSize) + 1
 
             };
         }

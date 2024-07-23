@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Task2.DBContext;
 using Task2.IRepository;
 using Task2.Repository;
+using Task2.Services;
 
 namespace Task2
 {
@@ -20,6 +21,7 @@ namespace Task2
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<UserService>();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,

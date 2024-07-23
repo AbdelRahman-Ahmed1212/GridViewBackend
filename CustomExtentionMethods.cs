@@ -2,6 +2,7 @@
 using Task2.DBContext;
 using Task2.DTOs;
 using Task2.Enums;
+using Task2.Interfaces;
 using Task2.Models;
 
 namespace Task2
@@ -22,6 +23,24 @@ namespace Task2
                 return retreivedUsers;
             return retreivedUsers.Where(query);
         }
+        public static string GenerateFilterQuery(this List<Filter> filters)
+        {
+            List<string> result = [];
+            foreach (var item in filters)
+            {
+                result.Add($"{item.FieldName}.toString().contains(\"{item.FilterText}\")");
+            }
+            return string.Join(" AND ", result);
+
+        }
+        public static IQueryable<DaUser> Paginate(this IQueryable<DaUser> daUsers , RequestDto requestDto)
+        {
+                  return daUsers.
+                                Skip(requestDto.PageSize * requestDto.CurrentPage)
+                               .Take(requestDto.PageSize);
+
+        }
+
     }
 
 }

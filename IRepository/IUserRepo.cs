@@ -6,12 +6,12 @@ namespace Task2.IRepository
 {
     public interface IUserRepo
     {
-        IEnumerable<DaUser> GetUsers(RequestDto requestDto);
-        public int Count();
+        IEnumerable<DaUser> GetUsers(RequestDto requestDtom, string filterQuery);
+        public int Count(string query);
 
         #region  Helpers
 
-         string GenerateFilterQuery(List<Filter> filters);
+        // string GenerateFilterQuery(List<Filter> filters);
        
         #endregion
 

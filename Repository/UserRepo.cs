@@ -14,37 +14,26 @@ namespace Task2.Repository
         {
             this.context = context;
         }
-        public IEnumerable<DaUser> GetUsers(RequestDto requestDto)
+        public IEnumerable<DaUser> GetUsers(RequestDto requestDto , string filterQuery)
         {
 
-            var res = GenerateFilterQuery(requestDto.filters);
 
             IQueryable<DaUser> usersPaginated =
                         context.DaUsers
-                               .CustomWhere(res)
+                               .CustomWhere(filterQuery)
                                .GenericSort(requestDto)
-                               .Skip(requestDto.PageSize * requestDto.CurrentPage)
-                               .Take(requestDto.PageSize);
+                               .Paginate(requestDto);
 
 
 
 
             return usersPaginated;
         }
-        public string GenerateFilterQuery(List<Filter> filters)
-        {
-            List<string> result = [];
-            foreach (var item in filters)
-            {
-                result.Add($"{item.FieldName}.toString().contains(\"{item.FilterText}\")");     
-            }
-           return string.Join(" AND ", result);
-           
-        }
+  
  
-        public int Count()
+        public int Count(string query)
         {
-            return context.DaUsers.Count();
+            return context.DaUsers.CustomWhere(query).Count();
         }
      
     }
