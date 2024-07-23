@@ -17,42 +17,31 @@ namespace Task2.Repository
         public IEnumerable<DaUser> GetUsers(RequestDto requestDto)
         {
 
+            var res = GenerateFilterQuery(requestDto.filters);
 
             IQueryable<DaUser> usersPaginated =
                         context.DaUsers
-                              // .Where($"{requestDto.searchColumn} = '{requestDto.searchWord}'")
+                               .CustomWhere(res)
                                .GenericSort(requestDto)
                                .Skip(requestDto.PageSize * requestDto.CurrentPage)
                                .Take(requestDto.PageSize);
 
 
-         var res =    GenerateFilterQuery(
-                    new List<Filter>()
-                    {
-                        new Filter()
-                        {
-                            FieldName = "Id",
-                            FilterText = "1"
-                        },
-                             new Filter()
-                        {
-                            FieldName = "FirstName",
-                            FilterText = "s"
-                        },
-                    });
 
 
             return usersPaginated;
         }
         public string GenerateFilterQuery(List<Filter> filters)
         {
-            string result = "";
+            List<string> result = [];
             foreach (var item in filters)
             {
-                result =" AND " + item.FieldName + "=" + "'" + item.FilterText + "' ";
+                result.Add($"{item.FieldName}.toString().contains(\"{item.FilterText}\")");     
             }
-            return result;
+           return string.Join(" AND ", result);
+           
         }
+ 
         public int Count()
         {
             return context.DaUsers.Count();

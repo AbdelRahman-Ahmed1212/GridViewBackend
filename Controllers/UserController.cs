@@ -18,12 +18,13 @@ namespace Task2.Controllers
         [HttpPost]
         public  ResponseDto<DaUser> Get(RequestDto requestDto)
         {
+            var users = userRepo.GetUsers(requestDto).ToList();
 
             return new ResponseDto<DaUser>
             {
-                Data = userRepo.GetUsers(requestDto).ToList(),
+                Data = users,
                 page = requestDto.CurrentPage,
-                TotalNumberOfPages = (userRepo.Count() / requestDto.PageSize) + 1
+                TotalNumberOfPages = (users.Count() / requestDto.PageSize) + 1
 
             };
         }
