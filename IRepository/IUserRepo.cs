@@ -11,7 +11,6 @@ namespace Task2.IRepository
 
         #region  Helpers
 
-        // string GenerateFilterQuery(List<Filter> filters);
        
         #endregion
 

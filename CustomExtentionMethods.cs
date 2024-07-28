@@ -1,9 +1,13 @@
-﻿using System.Linq.Dynamic.Core;
+﻿using Microsoft.EntityFrameworkCore.Storage.Json;
+using Newtonsoft.Json;
+using System.Linq.Dynamic.Core;
+using System.Text.Json;
 using Task2.DBContext;
 using Task2.DTOs;
 using Task2.Enums;
 using Task2.Interfaces;
 using Task2.Models;
+using Task2.ViewModels;
 
 namespace Task2
 {
@@ -23,13 +27,18 @@ namespace Task2
                 return retreivedUsers;
             return retreivedUsers.Where(query);
         }
-        public static string GenerateFilterQuery(this List<Filter> filters)
+        public static string GenerateFilterQuery(this object search)
         {
             List<string> result = [];
-            foreach (var item in filters)
+            SearchViewModel searchObj = JsonConvert.DeserializeObject<SearchViewModel>(search.ToString());
+            foreach (var prop in searchObj.GetType().GetProperties())
             {
-                result.Add($"{item.FieldName}.toString().contains(\"{item.FilterText}\")");
+                result.Add($"{prop.Name}.toString().contains(\"{prop.GetValue(searchObj)}\")");
             }
+            //foreach (var item in filters)
+            //{
+            //    result.Add($"{item.FieldName}.toString().contains(\"{item.FilterText}\")");
+            //}
             return string.Join(" AND ", result);
 
         }

@@ -11,8 +11,7 @@ namespace Task2.DTOs
         public int CurrentPage { set; get; }
         public int PageSize { set; get; }
 
-        public List<Filter> ?filters { set; get; }
-
+        public string searchObj { set; get; }
 
     }
 }

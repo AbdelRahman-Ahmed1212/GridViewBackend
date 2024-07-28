@@ -7,5 +7,7 @@
 
         public int TotalNumberOfPages { get; set; }
 
+        public int itemsCount { get; set; }
+
     }
 }

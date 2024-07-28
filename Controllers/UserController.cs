@@ -22,12 +22,14 @@ namespace Task2.Controllers
         [HttpPost]
         public  ResponseDto<UserViewModel> Get(RequestDto requestDto)
         {
-            var query = requestDto.filters.GenerateFilterQuery();
+            var query = requestDto.searchObj.GenerateFilterQuery();
+            var itemsCount = this.userRepo.Count(query);
             return new ResponseDto<UserViewModel>()
             {
                 Data = userService.GetUsersViewModel(requestDto).ToList(),
                 page = requestDto.CurrentPage,
-                TotalNumberOfPages = (this.userRepo.Count(query) / requestDto.PageSize) + 1
+                TotalNumberOfPages = (itemsCount / requestDto.PageSize) + 1,
+                itemsCount = itemsCount
 
             };
         }

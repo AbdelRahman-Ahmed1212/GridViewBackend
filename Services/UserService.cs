@@ -13,7 +13,7 @@ namespace Task2.Services
         }
         public IEnumerable<UserViewModel> GetUsersViewModel(RequestDto requestDto)
         {
-            var filterQuery = requestDto.filters.GenerateFilterQuery();
+            var filterQuery = requestDto.searchObj.GenerateFilterQuery();
 
             return repo.GetUsers(requestDto, filterQuery).Select(item=> new UserViewModel()
             {
